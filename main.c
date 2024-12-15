@@ -33,13 +33,19 @@ void main(int argc, char** argv){
     }
     printf("]\n");
 
-    MPI_Init(&argc, &argv);
-    MPI_Comm_size(MPI_COMM_WORLD, &world_size);
-    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+    // MPI_Init(&argc, &argv);
+    // MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+    // MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
-    // mpi_bitonic_sort(Array, world_rank, world_size, argc, argv);
+    mpi_bitonic_sort(Array, 0, N, 1);
 
-    MPI_Finalize();
+    printf("[");
+    for (int i = 0; i < N; i++) {
+        printf("%d ", Array[i]);
+    }
+    printf("]\n");
+
+    // MPI_Finalize();
 }
 
 //mpicc -o main main.c
