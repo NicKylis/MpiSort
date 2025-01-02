@@ -9,7 +9,7 @@
 #include "sortnmerge.h"
 
 void mpi_bitonic_sort(int *local_data, int local_size, int rank, int p) {
-    int step, partner, dir;
+    int step, partner;
     int *recv_buf = (int *)malloc(local_size * sizeof(int));
     
     for (step = 1; step <= p; step++) {
