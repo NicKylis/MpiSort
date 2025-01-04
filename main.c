@@ -15,6 +15,7 @@ int main(int argc, char *argv[]) {
     int *local_data;
     int local_size;
     int *sorted_data = NULL;
+    double start_time, end_time, elapsed_time, max_time;
 
     q = atoi(argv[1]);
     p = atoi(argv[2]);
@@ -40,16 +41,17 @@ int main(int argc, char *argv[]) {
     srand(time(NULL));
     generate_random_array(local_data, local_size, rank);
 
-    // Print the unsorted array for debugging (only in each process)
-    printf("Process %d unsorted array: ", rank);
-    for (int i = 0; i < local_size; i++) {
-        printf("%d ", local_data[i]);
-    }
-    printf("\n");
+    // Uncomment to print the unsorted array (only in each process):
+    // printf("Process %d unsorted array: ", rank);
+    // for (int i = 0; i < local_size; i++) {
+    //     printf("%d ", local_data[i]);
+    // }
+    // printf("\n");
 
     // Sort locally in ascending or descending order based on rank
     qsort(local_data, local_size, sizeof(int), (rank % 2 == 0) ? (int (*)(const void *, const void *))&cmp_asc : (int (*)(const void *, const void *))&cmp_desc);
 
+    start_time = MPI_Wtime();
     // Perform Bitonic Sort in parallel using MPI
     mpi_bitonic_sort(local_data, local_size, rank, p);
 
@@ -59,18 +61,23 @@ int main(int argc, char *argv[]) {
     }
 
     MPI_Gather(local_data, local_size, MPI_INT, sorted_data, local_size, MPI_INT, 0, MPI_COMM_WORLD);
+    
+    end_time = MPI_Wtime();
+    elapsed_time = end_time - start_time;
+    MPI_Reduce(&elapsed_time, &max_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
 
     // If root process, validate the final sorted result and print the final sorted array
     if (rank == 0) {
         bitonic_sort(sorted_data, 0, n, 1);
-        // Print the final sorted array (before validation)
-        printf("Final sorted array (from MPI): ");
-        for (int i = 0; i < n; i++) {
-            if(sorted_data[i] != 0){
-                printf("%d ", sorted_data[i]);
-            }
-        }
+        // Uncomment to print the final sorted array (before validation):
+        // printf("Final sorted array (from MPI): ");
+        // for (int i = 0; i < n; i++) {
+        //     if(sorted_data[i] != 0 && sorted_data[i] <= MAX_NUM){
+        //         printf("%d ", sorted_data[i]);
+        //     }
+        // }
         printf("\n");
+        printf("Time for completion: %f seconds\n", max_time);
 
         // Check correctness: Use qsort() to verify the result
         int *validation_data = (int *)malloc(n * sizeof(int));
