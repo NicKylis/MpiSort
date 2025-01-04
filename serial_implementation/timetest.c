@@ -21,11 +21,11 @@ int main(){
     generate_random_array(Array, N, 0);
 
     // Prints the initial array
-    printf("[");
-    for (int i = 0; i < N; i++) {
-        printf("%d ", Array[i]);
-    }
-    printf("]\n");
+    // printf("[");
+    // for (int i = 0; i < N; i++) {
+    //     printf("%d ", Array[i]);
+    // }
+    // printf("]\n");
 
     serial_sorting(Array, N);
 

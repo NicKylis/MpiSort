@@ -31,9 +31,9 @@ help:
 	@echo "Usage:"
 	@echo "  make           - Build the program."
 	@echo "  make clean     - Clean up build files."
-	@echo "  mpirun -np <num_processes> ./main <arg1> <arg2>"
+	@echo "  mpirun -np <num_processes> ./main <q> <num_processes>"
 	@echo "    - <num_processes>: Number of MPI processes."
-	@echo "    - <arg1>, <arg2>: User-supplied arguments."
+	@echo "    - <N>: User-supplied argument that defines the number of data to be sorted."
 
 # Phony targets
 .PHONY: all clean help

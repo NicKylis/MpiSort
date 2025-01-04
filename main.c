@@ -62,6 +62,7 @@ int main(int argc, char *argv[]) {
 
     MPI_Gather(local_data, local_size, MPI_INT, sorted_data, local_size, MPI_INT, 0, MPI_COMM_WORLD);
     
+    // End the timer once the sorting is over and calculate the maximun latency
     end_time = MPI_Wtime();
     elapsed_time = end_time - start_time;
     MPI_Reduce(&elapsed_time, &max_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
@@ -70,12 +71,12 @@ int main(int argc, char *argv[]) {
     if (rank == 0) {
         bitonic_sort(sorted_data, 0, n, 1);
         // Uncomment to print the final sorted array (before validation):
-        // printf("Final sorted array (from MPI): ");
-        // for (int i = 0; i < n; i++) {
-        //     if(sorted_data[i] != 0 && sorted_data[i] <= MAX_NUM){
-        //         printf("%d ", sorted_data[i]);
-        //     }
-        // }
+        printf("Final sorted array (from MPI): ");
+        for (int i = 0; i < n; i++) {
+            if(sorted_data[i] != 0 && sorted_data[i] <= MAX_NUM){
+                printf("%d ", sorted_data[i]);
+            }
+        }
         printf("\n");
         printf("Time for completion: %f seconds\n", max_time);
 
@@ -94,12 +95,7 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        if (mistakes) {
-            printf("Validation : The array has %d mistakes.\n", mistakes);
-        } else {
-            // printf("Validation successful: The array is correctly sorted.\n");
-            printf("Validation : The array has %d mistakes.\n", mistakes);
-        }
+        printf("Validation : The array has %d mistakes.\n", mistakes);
 
         free(validation_data);
         free(sorted_data);
@@ -110,7 +106,3 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
-
-//mpicc -o main main.c
-//mpirun -np {num_of_proccesses} ./main
-//mpirun -np 4 ./main
