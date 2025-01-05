@@ -4,7 +4,7 @@ This project presents a parallel solution to Array sorting using MPI. To run the
    This will clone the components of the repository to your local directory
 2. make
    This acitvates the Makefile which will produce the executable file main
-3. mpicc -np <p> ./main <q> <p>
+3. mpicc -np p ./main q p
    Runs the code with p processes and q elements for each process
 NOTE that p needs to be a power of 2. For more information you can also type:
 make help
