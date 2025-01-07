@@ -7,7 +7,7 @@
 #include <time.h>
 #include <string.h>
 
-#define MAX_NUM 1000
+#define MAX_NUM 1000 //Change this to the desired max value
 
 void generate_random_array(int *arr, int size, int rank) {
     srand(time(NULL) + rank);
